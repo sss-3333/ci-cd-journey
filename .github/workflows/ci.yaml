@@ -3,8 +3,8 @@ name: CoderCo Combined Testing  # Name of the workflow, shown in the GitHub Acti
 on: [push]  # Trigger: run this workflow every time code is pushed to the repo
 
 jobs:
-  build:  # Defines a job called "build"
-    runs-on: ubuntu-latest  # The job runs on a fresh Ubuntu virtual machine
+  build:  
+    runs-on: ubuntu-latest  
 
     strategy:
       matrix:
@@ -15,20 +15,21 @@ jobs:
       uses: actions/checkout@v2  # Pulls the repo's code onto the VM so later steps can access it
 
     - name: setup python  
-      uses: actions/setip-python@v2  # Sets up a Python environment on the VM
+      uses: actions/setup-python@v2  # Sets up a Python environment on the VM
       with:
         python-version: ${{ matrix.python-version }}  # Uses the current matrix value (3.8, 3.9, or 3.10) for this run
 
     - name: install dependencies  
       run: |  # Runs a multi-line shell script
         cd pythonapp
-        python -m pip install --upgrade pip  # Upgrade pip to the latest version      
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt]; then pip install -r requirements.txt; fi      
 
-    - name: run tests  # Step label
+    - name: run tests 
       run:
         cd pythonapp  
         python -m unittest discover  # Auto-discover and run all unittest test files in the folder
 
-    - name: notify us of success  # Step label
+    - name: notify us of success  
       run: echo "Tests passed on python ${{ matrix.python-version }}"  # Print a confirmation message including which Python version passed
       if: success()  # Only run this step if all previous steps in the job succeeded
