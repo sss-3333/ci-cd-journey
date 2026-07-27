@@ -21,12 +21,12 @@ jobs:
 
     - name: install dependencies  
       run: |  # Runs a multi-line shell script
-        cd pythonapp  # Move into the app subfolder
+        cd pythonapp
         python -m pip install --upgrade pip  # Upgrade pip to the latest version      
 
     - name: run tests  # Step label
       run:
-        cd pythonapp  # Move into the app subfolder
+        cd pythonapp  
         python -m unittest discover  # Auto-discover and run all unittest test files in the folder
 
     - name: notify us of success  # Step label
