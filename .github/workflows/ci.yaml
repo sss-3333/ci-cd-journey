@@ -1,35 +1,37 @@
-name: CoderCo Combined Testing  # Name of the workflow, shown in the GitHub Actions tab
+name: CoderCo Combined Testing
 
-on: [push]  # Trigger: run this workflow every time code is pushed to the repo
+on: [push]
 
 jobs:
-  build:  
-    runs-on: ubuntu-latest  
+  build:
+    runs-on: ubuntu-latest
 
     strategy:
-      matrix:
-        python-version: [3.8, 3.9]  # Matrix build: runs this job 3 times in parallel, once per Python version listed
+      matrix: 
+        python-version: [3.8, 3.9, 3.10]
 
+  
     steps:
-    - name: checkout code  
-      uses: actions/checkout@v2  # Pulls the repo's code onto the VM so later steps can access it
+    - name: checkout code
+      uses: actions/checkout@v2
 
-    - name: setup python  
-      uses: actions/setup-python@v2  # Sets up a Python environment on the VM
+
+    - name: setup python
+      uses: actions/setip-python@v2
       with:
-        python-version: ${{ matrix.python-version }}  # Uses the current matrix value (3.8, 3.9, or 3.10) for this run
+        python-version: ${{ matrix.python-version }}
 
-    - name: run tests
+    - name: install dependencies
       run: |
         cd pythonapp
-        python -m unittest discover
-        if [ -f requirements.txt]; then pip install -r requirements.txt; fi      
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt]; then pip install -r requirements.txt; fi 
 
-    - name: run tests 
+    - name: run tests
       run:
-        cd pythonapp  
-        python -m unittest discover  # Auto-discover and run all unittest test files in the folder
-
-    - name: notify us of success  
-      run: echo "Tests passed on python ${{ matrix.python-version }}"  # Print a confirmation message including which Python version passed
-      if: success()  # Only run this step if all previous steps in the job succeeded
+        cd pythonapp
+        python -m unittest discover
+    
+    - name: notify us of success
+      run: echo "Tests passed on python ${{ matrix.python-version }}"
+      if: success()
