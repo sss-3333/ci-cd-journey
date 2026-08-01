@@ -10,7 +10,7 @@ jobs:
     - name: checkout code
       uses: actions/checkout@v2
   
-    - name: hello world custome actions
+    - name: hello world custom actions
       uses: sss-3333/coderco-customaction-lab@main
       with:
         who-to-greet: 'coderco team'
